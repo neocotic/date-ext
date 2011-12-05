@@ -36,7 +36,7 @@
     // Regular expression used to tokenise format strings.
     R_TOKEN    = /[\\dDjlNSwzWFmMntLoYyaABgGhHisueIOPTZcrU]/g,
     // Regular expression used to extract timezone identifiers.
-		R_TIMEZONE = /([A-Z]+)(?=[\-\+]\d{4})/g;
+    R_TIMEZONE = /([A-Z]+)(?=[\-\+]\d{4})/g;
 
   // Private functions
   // -----------------
@@ -224,8 +224,8 @@
         escapeNext = true;
         return '';
       }
-			return params[str];
-		});
+      return params[str];
+    });
   }
 
   // Determine the [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) week
