@@ -40,7 +40,7 @@ new Date().isLeapYear()
 If you want more information or examples of using this library please visit the
 project's homepage;
 
-http://neocotic.github.com/date.js
+http://neocotic.com/date.js
 
-[date.js]: http://neocotic.github.com/date.js
+[date.js]: http://neocotic.com/date.js
 [date function]: http://php.net/manual/en/function.date.php

@@ -1,8 +1,8 @@
-// [date.js](http://neocotic.github.com/date.js) 1.0.0
-// (c) 2011 Alasdair Mercer
-// Licensed under the GPL Version 3 license.
-// For all details and documentation:
-// http://neocotic.github.com/date.js
+// [date.js](http://neocotic.com/date.js) 1.0.0  
+// (c) 2011 Alasdair Mercer  
+// Freely distributable under the MIT license.  
+// For all details and documentation:  
+// <http://neocotic.com/date.js>
 
 (function () {
 
@@ -70,141 +70,141 @@
 
         /* Day */
 
-        // Day of the month, 2 digits with leading zeros.
-        // Example: `01` to `31`
-        d : pad(j),
-        // Textual representation of a day, three letters.
-        // Example: `Mon` to `Sun`
-        D : DAYS[w],
-        // Day of the month, without leading zeros.
-        // Example: `1` to `31`
-        j : j,
-        // Full textual representation of the day of the week.
-        // Example: 'Monday` to `Sunday`
-        l : DAYS[w + 7],
+        // Day of the month, 2 digits with leading zeros.  
+        // **Example**: `01` to `31`
+        d: pad(j),
+        // Textual representation of a day, three letters.  
+        // **Example**: `Mon` to `Sun`
+        D: DAYS[w],
+        // Day of the month, without leading zeros.  
+        // **Example**: `1` to `31`
+        j: j,
+        // Full textual representation of the day of the week.  
+        // **Example**: 'Monday` to `Sunday`
+        l: DAYS[w + 7],
         // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) numeric
-        // representation of the day of the week.
-        // Example: `1` (for Monday) to `7` (for Sunday)
-        N : w || 7,
-        // English ordinal suffix for the day of the month, 2 characters.
-        // Example: `st`, `nd`, `rd` or `th` (works well with *j*)
-        S : ORDINALS[(j % 10 > 3) ? 0 : (j % 100 - j % 10 !== 10) * j % 10],
-        // Numeric representation of the day of the week.
-        // Example: `0` (for Sunday) to `6` (for Saturday)
-        w : w,
-        // Day of the year.
-        // Example: `0` to `365`
-        z : z,
+        // representation of the day of the week.  
+        // **Example**: `1` (for Monday) to `7` (for Sunday)
+        N: w || 7,
+        // English ordinal suffix for the day of the month, 2 characters.  
+        // **Example**: `st`, `nd`, `rd` or `th` (works well with *j*)
+        S: ORDINALS[(j % 10 > 3) ? 0 : (j % 100 - j % 10 !== 10) * j % 10],
+        // Numeric representation of the day of the week.  
+        // **Example**: `0` (for Sunday) to `6` (for Saturday)
+        w: w,
+        // Day of the year.  
+        // **Example**: `0` to `365`
+        z: z,
 
         /* Week */
 
         // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) week number of
-        // year, weeks starting on Monday.
-        // Example: `42` (the 42nd week in the year)
-        W : W,
+        // year, weeks starting on Monday.  
+        // **Example**: `42` (the 42nd week in the year)
+        W: W,
 
         /* Month */
 
-        // Full textual representation of a month.
-        // Example: `January` to `December`
-        F : MONTHS[n + 12],
-        // Numeric representation of a month, with leading zeros.
-        // Example: `01` to `12`
-        m : pad(n + 1),
-        // Textual representation of a month, three letters.
-        // Example: `Jan` to `Dec`
-        M : MONTHS[n],
-        // Numeric representation of a month, without leading zeros.
-        // Example: `1` to `12`
-        n : n + 1,
-        // Number of days in the given month.
-        // Example: `28` to `31`
-        t : t,
+        // Full textual representation of a month.  
+        // **Example**: `January` to `December`
+        F: MONTHS[n + 12],
+        // Numeric representation of a month, with leading zeros.  
+        // **Example**: `01` to `12`
+        m: pad(n + 1),
+        // Textual representation of a month, three letters.  
+        // **Example**: `Jan` to `Dec`
+        M: MONTHS[n],
+        // Numeric representation of a month, without leading zeros.  
+        // **Example**: `1` to `12`
+        n: n + 1,
+        // Number of days in the given month.  
+        // **Example**: `28` to `31`
+        t: t,
 
         /* Year */
 
-        // Whether it's a leap year.
-        // Example: `0` (false) to `1` (true)
-        L : date.isLeapYear() ? 1 : 0,
+        // Whether it's a leap year.  
+        // **Example**: `0` (false) to `1` (true)
+        L: date.isLeapYear() ? 1 : 0,
         // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) year number. This
         // has the same value as *Y*, except that if the ISO week number (*W*)
-        // belongs to the previous or next year, that year is used instead.
-        // Example: `1999` or `2003`
-        o : o,
-        // Full numeric representation of a year, 4 digits.
-        // Example: `1999` or `2003`
-        Y : Y,
-        // Numeric representation of a year, 2 digits.
-        // Example: `99` or `03`
-        y : String(Y).slice(2),
+        // belongs to the previous or next year, that year is used instead.  
+        // **Example**: `1999` or `2003`
+        o: o,
+        // Full numeric representation of a year, 4 digits.  
+        // **Example**: `1999` or `2003`
+        Y: Y,
+        // Numeric representation of a year, 2 digits.  
+        // **Example**: `99` or `03`
+        y: String(Y).slice(2),
 
         /* Time */
 
-        // Lowercase Ante meridiem and Post meridiem.
-        // Example: `am` or `pm`
-        a : (G < 12) ? 'am' : 'pm',
-        // Uppercase Ante meridiem and Post meridiem.
-        // Example: `AM` or `PM`
-        A : (G < 12) ? 'AM' : 'PM',
-        // Swatch Internet Time.
-        // Example: `000` to `999`
-        B : getSwatchInternetTime(date),
-        // 12-hour format of an hour, without leading zeros.
-        // Example: `1` to `12`
-        g : G % 12 || 12,
-        // 24-hour format of an hour, without leading zeros.
-        // Example: `0` to `23`
-        G : G,
-        // 12-hour format of an hour, with leading zeros.
-        // Example: `01` to `12`
-        h : pad(G % 12 || 12),
-        // 24-hour format of an hour, with leading zeros.
-        // Example: `00` to `23`
-        H : pad(G),
-        // Minutes, with leading zeros.
-        // Example: `00` to `59`
-        i : pad(i),
-        // Seconds, with leading zeros.
-        // Example: `00` to `59`
-        s : pad(s),
-        // Microseconds.
-        // Example: `654000`
-        u : u * 1000,
+        // Lowercase Ante meridiem and Post meridiem.  
+        // **Example**: `am` or `pm`
+        a: (G < 12) ? 'am' : 'pm',
+        // Uppercase Ante meridiem and Post meridiem.  
+        // **Example**: `AM` or `PM`
+        A: (G < 12) ? 'AM' : 'PM',
+        // Swatch Internet Time.  
+        // **Example**: `000` to `999`
+        B: getSwatchInternetTime(date),
+        // 12-hour format of an hour, without leading zeros.  
+        // **Example**: `1` to `12`
+        g: G % 12 || 12,
+        // 24-hour format of an hour, without leading zeros.  
+        // **Example**: `0` to `23`
+        G: G,
+        // 12-hour format of an hour, with leading zeros.  
+        // **Example**: `01` to `12`
+        h: pad(G % 12 || 12),
+        // 24-hour format of an hour, with leading zeros.  
+        // **Example**: `00` to `23`
+        H: pad(G),
+        // Minutes, with leading zeros.  
+        // **Example**: `00` to `59`
+        i: pad(i),
+        // Seconds, with leading zeros.  
+        // **Example**: `00` to `59`
+        s: pad(s),
+        // Microseconds.  
+        // **Example**: `654000`
+        u: u * 1000,
 
         /* Timezone */
 
-        // Timezone identifier.
-        // Example: `UTC` or `GMT`
-        e : e ? e[0] : '', // TODO: Validate
-        // Whether or not the date is in daylight saving time.
-        // Example: `0` (false) to `1` (true)
-        I : isDaylightSavingTime(date) ? 1 : 0,
-        // Difference to Greenwich time (GMT) in hours.
-        // Example: `+0200`
-        O : parseTimezoneOffset(date),
+        // Timezone identifier.  
+        // **Example**: `UTC` or `GMT`
+        e: e ? e[0] : '', // TODO: Validate
+        // Whether or not the date is in daylight saving time.  
+        // **Example**: `0` (false) to `1` (true)
+        I: isDaylightSavingTime(date) ? 1 : 0,
+        // Difference to Greenwich time (GMT) in hours.  
+        // **Example**: `+0200`
+        O: parseTimezoneOffset(date),
         // Difference to Greenwich time (GMT), with colon between hours and
-        // minutes.
-        // Example: `+02:00`
-        P : parseTimezoneOffset(date, ':'),
-        // Timezone abbreviation.
-        // Example: `EST` or `MDT`
-        T : e ? e[0] : '', // TODO: Validate
+        // minutes.  
+        // **Example**: `+02:00`
+        P: parseTimezoneOffset(date, ':'),
+        // Timezone abbreviation.  
+        // **Example**: `EST` or `MDT`
+        T: e ? e[0] : '', // TODO: Validate
         // Timezone offset in seconds. The offset for timezones west of UTC is
-        // always negative, and for those east of UTC is always positive.
-        // Example: `-43200` to `50400`
-        Z : Z * -60,
+        // always negative, and for those east of UTC is always positive.  
+        // **Example**: `-43200` to `50400`
+        Z: Z * -60,
 
         /* Full Date/Time */
 
-        // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) formatted date.
-        // Example: `2004-02-12T15:19:21+00:00`
-        c : '',
-        // [RFC 2822](http://www.faqs.org/rfcs/rfc2822.html) formatted date.
-        // Example: `Thu, 21 Dec 2000 16:01:07 +0200`
-        r : '',
-        // Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT).
-        // Example: `1323075181922`
-        U : U
+        // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) formatted date.  
+        // **Example**: `2004-02-12T15:19:21+00:00`
+        c: '',
+        // [RFC 2822](http://www.faqs.org/rfcs/rfc2822.html) formatted date.  
+        // **Example**: `Thu, 21 Dec 2000 16:01:07 +0200`
+        r: '',
+        // Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT).  
+        // **Example**: `1323075181922`
+        U: U
 
       };
       // Populate *c* and *r* while avoiding infinite circular calls to
@@ -213,7 +213,7 @@
       params.r = format(date, F_RFC_2822, params);
     }
     // Replace all parameters within format string while ignoring any escaped
-    // by a backslash (\).
+    // by a backslash.
     var escapeNext = false;
     return formatStr.replace(R_TOKEN, function (str) {
       if (escapeNext) {
