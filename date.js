@@ -47,7 +47,7 @@
     if (typeof formatStr !== 'string') formatStr = F_RFC_2822;
     // Only populate `params` if it hasn't already been (for this call route).
     if (!params) {
-      // Helper variables to be used when populate parameters.
+      // Helper variables to be used when populating parameters.
       var
         j = date.getDate(),
         w = date.getDay(),
