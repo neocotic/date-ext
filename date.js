@@ -34,7 +34,7 @@
     // Map of ordinals for *S*.
     ORDINALS   = ['th', 'st', 'nd', 'rd'],
     // Regular expression used to tokenise format strings.
-    R_TOKEN    = /[\\dDjlNSwzWFmMntLoYyaABgGhHisueIOPTZcrU]/g,
+    R_TOKEN    = /\\?[\\dDjlNSwzWFmMntLoYyaABgGhHisueIOPTZcrU]/g,
     // Regular expression used to extract timezone identifiers.
     R_TIMEZONE = /([A-Z]+)(?=[\-\+]\d{4})/g;
 
@@ -214,16 +214,9 @@
     }
     // Replace all parameters within format string while ignoring any escaped
     // by a backslash.
-    var escapeNext = false;
     return formatStr.replace(R_TOKEN, function (str) {
-      if (escapeNext) {
-        escapeNext = false;
-        return str;
-      }
-      if (str === '\\') {
-        escapeNext = true;
-        return '';
-      }
+      if (str === '\\') return str;
+      if (str.indexOf('\\') === 0) return str.substr(1);
       return params[str];
     });
   }
