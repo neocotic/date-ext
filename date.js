@@ -174,8 +174,11 @@
         /* Timezone */
 
         // Timezone identifier.  
+        // Unfortunately, it doesn't seem possible to replicate the same
+        // behaviour as [PHP date](http://php.net/manual/en/function.date.php)
+        // here, so this currently duplicates *T*.  
         // **Example**: `UTC` or `GMT`
-        e: e ? e[0] : '', // TODO: Validate
+        e: e ? e[0] : '',
         // Whether or not the date is in daylight saving time.  
         // **Example**: `0` (false) to `1` (true)
         I: isDaylightSavingTime(date) ? 1 : 0,
@@ -187,8 +190,8 @@
         // **Example**: `+02:00`
         P: parseTimezoneOffset(date, ':'),
         // Timezone abbreviation.  
-        // **Example**: `EST` or `MDT`
-        T: e ? e[0] : '', // TODO: Validate
+        // **Example**: `UTC` or `GMT`
+        T: e ? e[0] : '',
         // Timezone offset in seconds. The offset for timezones west of UTC is
         // always negative, and for those east of UTC is always positive.  
         // **Example**: `-43200` to `50400`

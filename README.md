@@ -33,7 +33,9 @@ new Date().isLeapYear()
 ## TODO
 
 * Create and maintain unit tests.
-* Validate and test timezone parameters more.
+* Update docs.
+* Release initial version (create tag).
+* Create site.
 
 ## Further Information
 
