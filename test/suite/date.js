@@ -18,7 +18,12 @@ test('format', function () {
 });
 
 test('getDayOfYear', function () {
-  // TODO: Unit tests
+  var date = new Date(T_DATE.getTime());
+  equals(date.getDayOfYear(), 0, 'First day of the year is zero');
+  date.setMonth(11, 31);
+  equals(date.getDayOfYear(), 364, 'Last day of the year is 364');
+  date.setFullYear(2008);
+  equals(date.getDayOfYear(), 365, 'Last day of a leap year is 365');
 });
 
 test('getDaysInMonth', function () {
@@ -37,11 +42,27 @@ test('getDaysInMonth', function () {
 });
 
 test('getWeekOfYear', function () {
-  // TODO: Unit tests
+  var date = new Date(T_DATE.getTime());
+  date.setDate(2);
+  equals(date.getWeekOfYear(), 53, 'January 2nd 2011 is in 53rd week');
+  date.setDate(3);
+  equals(date.getWeekOfYear(), 1, 'January 3rd 2011 is in 1st week');
+  date.setFullYear(2012, 0, 1);
+  equals(date.getWeekOfYear(), 52, 'January 1st 2012 is in 52nd week');
+  date.setDate(2);
+  equals(date.getWeekOfYear(), 1, 'January 2nd 2012 is in 1st week');
 });
 
 test('getYearOfWeek', function () {
-  // TODO: Unit tests
+  var date = new Date(T_DATE.getTime());
+  date.setDate(2);
+  equals(date.getYearOfWeek(), 2010, 'January 2nd 2011 is in 2010, honest');
+  date.setDate(3);
+  equals(date.getYearOfWeek(), 2011, 'January 3rd 2011 is in 2011');
+  date.setFullYear(2012, 0, 1);
+  equals(date.getYearOfWeek(), 2011, 'January 1st 2012 is in 2011');
+  date.setDate(2);
+  equals(date.getYearOfWeek(), 2012, 'January 2nd 2012 is in 2012');
 });
 
 test('isLeapYear', function () {
