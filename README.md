@@ -32,7 +32,7 @@ new Date().isLeapYear()
 
 ## TODO
 
-* Create and maintain unit tests.
+* Complete unit tests.
 * Release initial version (create tag).
 
 ## Further Information
