@@ -49,21 +49,13 @@
     if (!params) {
       // Helper variables to be used when populating parameters.
       var
-        j = date.getDate(),
-        w = date.getDay(),
-        z = date.getDayOfYear(),
-        W = date.getWeekOfYear(),
-        n = date.getMonth(),
-        t = date.getDaysInMonth(),
-        o = date.getYearOfWeek(),
-        Y = date.getFullYear(),
-        G = date.getHours(),
-        i = date.getMinutes(),
-        s = date.getSeconds(),
-        u = date.getMilliseconds(),
-        e = date.toString().match(R_TIMEZONE),
-        Z = date.getTimezoneOffset(),
-        U = date.getTime();
+        iso = getISODate(date),
+        j   = date.getDate(),
+        w   = date.getDay(),
+        n   = date.getMonth(),
+        Y   = date.getFullYear(),
+        G   = date.getHours(),
+        e   = date.toString().match(R_TIMEZONE);
       // Based on the parameters of
       // [PHP date](http://php.net/manual/en/function.date.php).
       params = {
@@ -94,14 +86,14 @@
         w: w,
         // Day of the year.  
         // **Example**: `0` to `365`
-        z: z,
+        z: date.getDayOfYear(),
 
         /* Week */
 
         // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) week number of
         // year, weeks starting on Monday.  
         // **Example**: `42` (the 42nd week in the year)
-        W: W,
+        W: iso[1],
 
         /* Month */
 
@@ -119,7 +111,7 @@
         n: n + 1,
         // Number of days in the given month.  
         // **Example**: `28` to `31`
-        t: t,
+        t: date.getDaysInMonth(),
 
         /* Year */
 
@@ -130,7 +122,7 @@
         // has the same value as *Y*, except that if the ISO week number (*W*)
         // belongs to the previous or next year, that year is used instead.  
         // **Example**: `1999` or `2003`
-        o: o,
+        o: iso[0],
         // Full numeric representation of a year, 4 digits.  
         // **Example**: `1999` or `2003`
         Y: Y,
@@ -146,7 +138,8 @@
         // Uppercase Ante meridiem and Post meridiem.  
         // **Example**: `AM` or `PM`
         A: (G < 12) ? 'AM' : 'PM',
-        // Swatch Internet Time.  
+        // [Swatch Internet
+        // Time](http://en.wikipedia.org/wiki/Swatch_Internet_Time).  
         // **Example**: `000` to `999`
         B: getSwatchInternetTime(date),
         // 12-hour format of an hour, without leading zeros.  
@@ -163,13 +156,13 @@
         H: pad(G),
         // Minutes, with leading zeros.  
         // **Example**: `00` to `59`
-        i: pad(i),
+        i: pad(date.getMinutes()),
         // Seconds, with leading zeros.  
         // **Example**: `00` to `59`
-        s: pad(s),
+        s: pad(date.getSeconds()),
         // Microseconds.  
         // **Example**: `654000`
-        u: u * 1000,
+        u: pad(date.getMilliseconds() * 1000, 6),
 
         /* Timezone */
 
@@ -181,7 +174,7 @@
         e: e ? e[0] : '',
         // Whether or not the date is in daylight saving time.  
         // **Example**: `0` (false) to `1` (true)
-        I: isDaylightSavingTime(date) ? 1 : 0,
+        I: date.isDaylightSavingTime() ? 1 : 0,
         // Difference to Greenwich time (GMT) in hours.  
         // **Example**: `+0200`
         O: parseTimezoneOffset(date),
@@ -195,7 +188,7 @@
         // Timezone offset in seconds. The offset for timezones west of UTC is
         // always negative, and for those east of UTC is always positive.  
         // **Example**: `-43200` to `50400`
-        Z: Z * -60,
+        Z: date.getTimezoneOffset() * -60,
 
         /* Full Date/Time */
 
@@ -206,8 +199,8 @@
         // **Example**: `Thu, 21 Dec 2000 16:01:07 +0200`
         r: '',
         // Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT).  
-        // **Example**: `1323075181922`
-        U: U
+        // **Example**: `1293886861`
+        U: Math.round(date.getTime() / 1000)
 
       };
       // Populate *c* and *r* while avoiding infinite circular calls to
@@ -224,19 +217,22 @@
     });
   }
 
-  // Determine the [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) week
+  // Determine the [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601)
   // information for the given `date`.
-  function getISOWeek(date) {
-    // Copy `date` and set to the nearest Thursday of the current ISO week.
-    var copy = new Date(date);
-    copy.setDate(copy.getDate() + 4 - (copy.getDay() || 7));
+  function getISODate(date) {
+    // Using UTC is much faster.
     var
-      year  = copy.getFullYear(),
-      // Get the 1st of January of the current year.
-      start = new Date(year, 0, 1),
-      // Determine number of weeks to the nearest Thursday.
-      week  = Math.ceil((((copy - start) / (1000 * 60 * 60 * 24)) + 1) / 7);
-    return [year, week];
+      copy = new Date(Date.UTC(date.getFullYear(), date.getMonth(),
+                               date.getDate())),
+      day  = copy.getUTCDay();
+    // Determine the nearest Thursday.
+    copy.setUTCDate(copy.getUTCDate() - (day + 6) % 7 + 3);
+    var start = copy.getTime();
+    // 4th of January is 1st week in
+    // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601).
+    copy.setUTCMonth(0, 4);
+    var week = Math.round((start - copy) / (7 * (1000 * 60 * 60 * 24))) + 1;
+    return [copy.getUTCFullYear(), week, day || 7];
   }
 
   // Calculate the
@@ -247,13 +243,6 @@
                (date.getUTCMinutes() / 60) +
                (date.getUTCSeconds() / (60 * 60));
     return Math.floor(time * 1000 / 24);
-  }
-
-  // Determine whether or not the given `date` is in daylight saving time.
-  function isDaylightSavingTime(date) {
-    var copy = new Date(date);
-    copy.setMonth(0, 1);
-    return copy.getTimezoneOffset() !== date.getTimezoneOffset();
   }
 
   // Apply left padding of zero characters to the given `value` to ensure
@@ -292,13 +281,13 @@
 
   // Return the days in the month for the current date.
   Date.prototype.getDaysInMonth = function () {
-    return new Date(this.getFullYear(), this.getMonth() + 1, 0).getDate();
+    return (new Date(this.getFullYear(), this.getMonth() + 1, 0)).getDate();
   };
 
   // Return the [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) week number
   // of the year for the current date.
   Date.prototype.getWeekOfYear = function () {
-    return getISOWeek(this)[1];
+    return getISODate(this)[1];
   };
 
   // Return the [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) year number.
@@ -306,12 +295,19 @@
   // number (`getWeekOfYear`) belongs to the previous or next year, that year
   // is used instead.
   Date.prototype.getYearOfWeek = function () {  
-    return getISOWeek(this)[0];
+    return getISODate(this)[0];
+  };
+
+  // Return whether or not the current date is in daylight saving time.
+  Date.prototype.isDaylightSavingTime = function () {
+    var start = new Date(this);
+    start.setMonth(0, 1);
+    return start.getTimezoneOffset() !== this.getTimezoneOffset();
   };
 
   // Return whether or not the current date is in a leap year.
   Date.prototype.isLeapYear = function () {
-    return new Date(this.getFullYear(), 1, 29).getMonth() === 1;
+    return (new Date(this.getFullYear(), 1, 29)).getMonth() === 1;
   };
 
 }());

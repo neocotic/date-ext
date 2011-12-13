@@ -27,18 +27,24 @@ new Date().getDayOfYear()
 new Date().getDaysInMonth()
 new Date().getWeekOfYear()
 new Date().getYearOfWeek()
+new Date().isDaylightSavingTime()
 new Date().isLeapYear()
 ```
 
-## TODO
+## Issues
 
-* Complete unit tests.
-* Release initial version (create tag).
+If you have any problems with this library or would like to see the changes
+currently in development you can do so here;
+
+https://github.com/neocotic/date.js/issues
 
 ## Further Information
 
-If you want more information or examples of using this library please visit the
-project's homepage;
+Take a look at `docs/date.html` to get a better understanding of what the code
+is doing.
+
+However, if you want more information or examples of using this library please
+visit the project's homepage;
 
 http://neocotic.com/date.js
 
