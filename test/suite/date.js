@@ -19,6 +19,52 @@
     }
   });
 
+  // `clear` tests
+  // -------------
+
+  test('clear', function () {
+    date.clear();
+    equal(date.getFullYear(), 0, 'Year is cleared');
+    equal(date.getMonth(), 0, 'Month is cleared');
+    equal(date.getDate(), 1, 'Date is cleared');
+    equal(date.getHours(), 0, 'Hours are cleared');
+    equal(date.getMinutes(), 0, 'Minutes are cleared');
+    equal(date.getSeconds(), 0, 'Seconds are cleared');
+    equal(date.getMilliseconds(), 0, 'Milliseconds are cleared');
+  });
+
+  // `clearDate` tests
+  // -------------
+
+  test('clearDate', function () {
+    date.setMonth(2, 2);
+    date.setMilliseconds(1);
+    date.clearDate();
+    equal(date.getFullYear(), 0, 'Year is cleared');
+    equal(date.getMonth(), 0, 'Month is cleared');
+    equal(date.getDate(), 1, 'Date is cleared');
+    equal(date.getHours(), 13, 'Hours are preserved');
+    equal(date.getMinutes(), 1, 'Minutes are preserved');
+    equal(date.getSeconds(), 1, 'Seconds are preserved');
+    equal(date.getMilliseconds(), 1, 'Milliseconds are preserved');
+  });
+
+  // `clearTime` tests
+  // -------------
+
+  test('clearTime', function () {
+    date.setMonth(2, 2);
+    date.setMilliseconds(1);
+    date.clearTime();
+    equal(date.getFullYear(), 2011, 'Year is preserved');
+    equal(date.getMonth(), 2, 'Month is preserved');
+    equal(date.getDate(), 2, 'Date is preserved');
+    equal(date.getHours(), 0, 'Hours are cleared');
+    equal(date.getMinutes(), 0, 'Minutes are cleared');
+    equal(date.getSeconds(), 0, 'Seconds are cleared');
+    equal(date.getMilliseconds(), 0, 'Milliseconds are cleared');
+  });
+
   // `format` tests
   // --------------
 

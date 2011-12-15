@@ -13,16 +13,22 @@ everyday methods.
 
 ## Formatting
 
+Formatting is now extremely simple and uses the same parameters as PHP's [date
+function][] as well as the escape sequence (backslash).
+
 ``` javascript
 new Date().format(formatStr)
 ```
 
-Formatting is now extremely simple and uses the same parameters as PHP's [date
-function][] as well as the escape sequence (backslash).
+## Miscellaneous
 
-## Standard Usage
+The library also comes packed with a few more simple - yet extremely useful -
+everyday methods.
 
 ``` javascript
+new Date().clear()
+new Date().clearDate()
+new Date().clearTime()
 new Date().getDayOfYear()
 new Date().getDaysInMonth()
 new Date().getWeekOfYear()
@@ -31,22 +37,28 @@ new Date().isDaylightSavingTime()
 new Date().isLeapYear()
 ```
 
-## Issues
+## Bugs
 
 If you have any problems with this library or would like to see the changes
 currently in development you can do so here;
 
 https://github.com/neocotic/date.js/issues
 
-## Further Information
+Developers should run all tests in `test/index.html` and ensure they pass before
+submitting a pull request.
+
+## Questions?
 
 Take a look at `docs/date.html` to get a better understanding of what the code
 is doing.
+
+If that doesn't help, feel free to follow me on Twitter, [@neocotic][].
 
 However, if you want more information or examples of using this library please
 visit the project's homepage;
 
 http://neocotic.com/date.js
 
+[@neocotic]: https://twitter.com/#!/neocotic
 [date.js]: http://neocotic.com/date.js
 [date function]: http://php.net/manual/en/function.date.php

@@ -268,6 +268,25 @@
   // Public functions
   // ----------------
 
+  // Clear the date and time fields for the current date.
+  Date.prototype.clear = function () {
+    this.clearDate();
+    this.clearTime();
+    return this;
+  };
+
+  // Clear the date fields for the current date.
+  Date.prototype.clearDate = function () {
+    this.setFullYear(0, 0, 1);
+    return this;
+  };
+
+  // Clear the time fields for the current date.
+  Date.prototype.clearTime = function () {
+    this.setHours(0, 0, 0, 0);
+    return this;
+  };
+
   // Format the current date using the format string provided.
   Date.prototype.format = function (formatStr) {
     return format(this, formatStr);
