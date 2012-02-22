@@ -11,6 +11,14 @@
 [date.js][] is a JavaScript library for extending `Date` objects with useful
 everyday methods.
 
+## Diff'ing
+
+Always wanted an easy way to diff two dates? Now you have a variety of options.
+
+``` javascript
+new Date().diff(date[, list])
+```
+
 ## Formatting
 
 Formatting is now extremely simple and uses the same parameters as PHP's [date
@@ -19,6 +27,28 @@ function][] as well as the escape sequence (backslash).
 ``` javascript
 new Date().format(formatStr)
 ```
+
+## Scheduling
+
+Want to schedule a function to be called at a certain time? Well, it couldn't be
+any easier.
+
+``` javascript
+Date.schedule(date, function)
+new Date().schedule(function)
+```
+
+If the date is *now* or in the past it will simply be called immediately. Also,
+if you change your mind you can just prevent it from being called.
+
+``` javascript
+Date.unschedule(scheduleId)
+new Date().unschedule(scheduleId)
+```
+
+The `scheduleId` is returned by the call to `schedule` and will be unique for
+every call. However, This will be `undefined` in cases where the function was
+called immediately.
 
 ## Miscellaneous
 

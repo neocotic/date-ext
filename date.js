@@ -1,5 +1,5 @@
-// [date.js](http://neocotic.com/date.js) 1.0.0  
-// (c) 2011 Alasdair Mercer  
+// [date.js](http://neocotic.com/date.js) 1.0.1  
+// (c) 2012 Alasdair Mercer  
 // Freely distributable under the MIT license.  
 // For all details and documentation:  
 // <http://neocotic.com/date.js>
@@ -18,6 +18,17 @@
       'Sunday',  'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
       'Saturday'
     ],
+    // Map of values used to calculate diffs for date fields.
+    DIFFS      = {
+      years:        1,
+      months:       12,
+      weeks:        52.17857,
+      days:         365.25,
+      hours:        24 * 365.25,
+      minutes:      60 * 24 * 365.25,
+      seconds:      60 * 60 * 24 * 365.25,
+      milliseconds: 1000 * 60 * 60 * 24 * 365.25
+    },
     // Format string for [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601).
     F_ISO_8601 = 'Y-m-d\\TH:i:sP',
     // Format string for [RFC 2822](http://www.faqs.org/rfcs/rfc2822.html).
@@ -31,15 +42,44 @@
       'January', 'February',  'March',   'April',    'May',     'June', 'July',
       'August',  'September', 'October', 'November', 'December'
     ],
-    // Map of ordinals for *S*.
+    // Milliseconds in a standard year.
+    MS_IN_YEAR = DIFFS.milliseconds,
+    // List of ordinals for *S*.
     ORDINALS   = ['th', 'st', 'nd', 'rd'],
     // Regular expression used to tokenise format strings.
     R_TOKEN    = /\\?[\\dDjlNSwzWFmMntLoYyaABgGhHisueIOPTZcrU]/g,
     // Regular expression used to extract timezone identifiers.
     R_TIMEZONE = /([A-Z]+)(?=[\-\+]\d{4})/g;
 
+  // Private variables
+  // -----------------
+
+  // List of every `scheduleId` that is currently active.
+  var tasks = [];
+
   // Private functions
   // -----------------
+
+  // Build a diff of the two dates specified.  
+  // TODO: Allow relative diffing.
+  function diff(date, otherDate, list) {
+    // Use Unix Epoch (January 1 1970 00:00:00 GMT) if no other date was
+    // specified.
+    if (otherDate == null) otherDate = new Date(0);
+    var
+      fields = {},
+      time   = Math.abs(date - otherDate);
+    // Calculate the difference for each field.
+    for (var field in DIFFS) {
+      if (DIFFS.hasOwnProperty(field)) {
+        fields[field] = Math.round(time * (DIFFS[field] / MS_IN_YEAR));
+      }
+    }
+    return !list ? fields : [
+      fields.years, fields.months,  fields.weeks,   fields.days,
+      fields.hours, fields.minutes, fields.seconds, fields.milliseconds
+    ];
+  }
 
   // Format the given `date` using the format string provided.
   function format(date, formatStr, params) {
@@ -93,7 +133,7 @@
         // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) week number of
         // year, weeks starting on Monday.  
         // **Example**: `42` (the 42nd week in the year)
-        W: iso[1],
+        W: iso.week,
 
         /* Month */
 
@@ -122,7 +162,7 @@
         // has the same value as *Y*, except that if the ISO week number (*W*)
         // belongs to the previous or next year, that year is used instead.  
         // **Example**: `1999` or `2003`
-        o: iso[0],
+        o: iso.year,
         // Full numeric representation of a year, 4 digits.  
         // **Example**: `1999` or `2003`
         Y: Y,
@@ -232,7 +272,11 @@
     // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601).
     copy.setUTCMonth(0, 4);
     var week = Math.round((start - copy) / (7 * (1000 * 60 * 60 * 24))) + 1;
-    return [copy.getUTCFullYear(), week, day || 7];
+    return {
+      day:  day || 7,
+      week: week,
+      year: copy.getUTCFullYear()
+    };
   }
 
   // Calculate the
@@ -287,6 +331,27 @@
     return this;
   };
 
+  // Diff the current date against the `date` specified.  
+  // Normally, an object should be returned with a key/value mapping for each
+  // field. However, if `list` is *truey*, an array containing each value in the
+  // following ordershould be returned instead;
+  // 
+  // 1. Years
+  // 2. Months
+  // 3. Weeks
+  // 4. Days
+  // 5. Hours
+  // 6. Minutes
+  // 7. Seconds
+  // 8. Milliseconds
+  // 
+  // Each value will represent its own diff and will not be relative to the
+  // other values. For example; if the dates are two years and one month apart
+  // the values will look something like `[2, 25...]` and not `[2, 1...]`.
+  Date.prototype.diff = function (date, list) {
+    return diff(this, date, list);
+  };
+
   // Format the current date using the format string provided.
   Date.prototype.format = function (formatStr) {
     return format(this, formatStr);
@@ -295,7 +360,7 @@
   // Return the day of the year for the current date.
   Date.prototype.getDayOfYear = function () {
     var start = new Date(this.getFullYear(), 0, 1);
-    return Math.ceil((this - start) / 1000 / 60 / 60 / 24) - 1;
+    return Math.floor((this - start) / 1000 / 60 / 60 / 24);
   };
 
   // Return the days in the month for the current date.
@@ -306,7 +371,7 @@
   // Return the [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) week number
   // of the year for the current date.
   Date.prototype.getWeekOfYear = function () {
-    return getISODate(this)[1];
+    return getISODate(this).week;
   };
 
   // Return the [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) year number.
@@ -314,7 +379,7 @@
   // number (`getWeekOfYear`) belongs to the previous or next year, that year
   // is used instead.
   Date.prototype.getYearOfWeek = function () {  
-    return getISODate(this)[0];
+    return getISODate(this).year;
   };
 
   // Return whether or not the current date is in daylight saving time.
@@ -327,6 +392,56 @@
   // Return whether or not the current date is in a leap year.
   Date.prototype.isLeapYear = function () {
     return (new Date(this.getFullYear(), 1, 29)).getMonth() === 1;
+  };
+
+  // Schedule the function provided to be called when `date` is reached.  
+  // `callback` will be called immediately if `date` is *now* or in the past.  
+  // Return a `scheduleId` for possible use with `unschedule`.
+  Date.schedule = function (date, callback) {
+    // Use current date if `date` was not specified.
+    if (date == null) date = new Date();
+    var
+      scheduleId,
+      time = date - new Date();
+    // Simple wrapper function to clear out used tasks before calling the
+    // scheduled function.
+    function wrapper() {
+      var idx = tasks.indexOf(scheduleId);
+      if (idx !== -1) {
+        tasks.splice(idx, 1);
+        callback();
+      }
+    }
+    // Check that `callback` is indeed a function and then either call it
+    // immediately or schedule it.
+    if (typeof callback === 'function') {
+      if (time <= 0) {
+        callback();
+      } else {
+        tasks.push(scheduleId = setTimeout(wrapper, time));
+      }
+    }
+    return scheduleId;
+  };
+
+  // Schedule the function provided to be called when the current date is
+  // reached.  
+  // `callback` will be called immediately if current date is *now* or in the
+  // past.  
+  // Return a `scheduleId` for possible use with `unschedule`.
+  Date.prototype.schedule = function (callback) {
+    return Date.schedule(this, callback);
+  };
+
+  // Prevent a scheduled function from being called.
+  Date.unschedule = Date.prototype.unschedule = function (scheduleId) {
+    var idx = tasks.indexOf(scheduleId);
+    if (idx !== -1) {
+      clearTimeout(scheduleId);
+      tasks.splice(idx, 1);
+      return true;
+    }
+    return false;
   };
 
 }());

@@ -1,7 +1,7 @@
 {
   "name"        : "date",
   "description" : "Library for extending JavaScript dates",
-  "version"     : "1.0.0",
+  "version"     : "1.0.1",
   "homepage"    : "http://neocotic.com/date.js",
   "bugs"        : {"url"   : "https://github.com/neocotic/date.js/issues"},
   "author"      : "Alasdair Mercer <mercer.alasdair@gmail.com> (http://neocotic.com)",
