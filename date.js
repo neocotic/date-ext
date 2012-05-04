@@ -46,6 +46,12 @@
   // Private functions
   // -----------------
 
+  // Add/subtract the `value` from the specified `field` of the given `date`.
+  function addToField(date, field, value) {
+    if (value) date['set' + field](date['get' + field]() + value);
+    return date;
+  }
+
   // Format the given `date` using the format string provided.
   function format(date, formatStr, params) {
     // Use `F_RFC_2822` if no format string was specified.
@@ -263,6 +269,41 @@
   // Public functions
   // ----------------
 
+  // Add/subtract the specified number of `days` from the current date.
+  Date.prototype.addDays = function(days) {
+    return addToField(this, 'Date', days);
+  };
+
+  // Add/subtract the specified number of `hours` from the current date.
+  Date.prototype.addHours = function(hours) {
+    return addToField(this, 'Hours', hours);
+  };
+
+  // Add/subtract the specified number of `milliseconds` from the current date.
+  Date.prototype.addMilliseconds = function(milliseconds) {
+    return addToField(this, 'Milliseconds', milliseconds);
+  };
+
+  // Add/subtract the specified number of `minutes` from the current date.
+  Date.prototype.addMinutes = function(minutes) {
+    return addToField(this, 'Minutes', minutes);
+  };
+
+  // Add/subtract the specified number of `months` from the current date.
+  Date.prototype.addMonths = function(months) {
+    return addToField(this, 'Month', months);
+  };
+
+  // Add/subtract the specified number of `seconds` from the current date.
+  Date.prototype.addSeconds = function(seconds) {
+    return addToField(this, 'Seconds', seconds);
+  };
+
+  // Add/subtract the specified number of `years` from the current date.
+  Date.prototype.addYears = function(years) {
+    return addToField(this, 'FullYear', years);
+  };
+
   // Clear the date and time fields for the current date.
   Date.prototype.clear = function() {
     this.clearDate();
@@ -327,8 +368,16 @@
   // Schedule the function provided to be called when `date` is reached.  
   // `callback` will be called immediately if `date` is *now* or in the past.  
   // Return a `scheduleId` for possible use with `unschedule`.
-  Date.schedule = function(date, callback) {
-    // Use current date if `date` was not specified.
+  Date.schedule = function(date, callback, context) {
+    // Handle optional arguments accordingly.
+    if ('string' === typeof callback) {
+      context = callback;
+      callback = null;
+    }
+    if ('function' === typeof date) {
+      callback = date;
+      date = null;
+    }
     if (date == null) date = new Date();
     var scheduleId
       , time = date - new Date();
@@ -338,14 +387,14 @@
       var idx = tasks.indexOf(scheduleId);
       if (idx > -1) {
         tasks.splice(idx, 1);
-        callback(date);
+        callback.call(context);
       }
     }
     // Check that `callback` is indeed a function and then either call it
     // immediately or schedule it.
     if ('function' === typeof callback) {
       if (time <= 0) {
-        callback(date);
+        callback.call(context);
       } else {
         tasks.push(scheduleId = setTimeout(wrapper, time));
       }
@@ -358,8 +407,8 @@
   // `callback` will be called immediately if current date is *now* or in the
   // past.  
   // Return a `scheduleId` for possible use with `unschedule`.
-  Date.prototype.schedule = function(callback) {
-    return Date.schedule(this, callback);
+  Date.prototype.schedule = function(callback, context) {
+    return Date.schedule(this, callback, context);
   };
 
   // Prevent a scheduled function from being called.

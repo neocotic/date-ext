@@ -18,6 +18,109 @@
     }
   });
 
+  // Add/subtract tests
+  // ------------------
+
+  test('addDays', function() {
+    equal(date.addDays(2).getDate(), 3
+        , 'January 1st plus 2 days is January 3rd');
+    equal(date.addDays(0).getDate(), 3
+        , 'January 3rd plus 0 days is January 3rd');
+    equal(date.addDays(-1).getDate(), 2
+        , 'January 3rd minus 1 day is January 2nd');
+    date.addDays(-2);
+    deepEqual([date.getDate(), date.getMonth(), date.getFullYear()]
+        , [31, 11, 2010]
+        , 'January 1st 2011 minus 2 days is December 31st 2010');
+    date.addDays(32);
+    deepEqual([date.getDate(), date.getMonth(), date.getFullYear()]
+        , [1, 1, 2011]
+        , 'December 31st 2010 plus 32 days is February 1st 2011');
+  });
+
+  test('addHours', function() {
+    equal(date.addHours(2).getHours(), 15
+        , 'Saturday 13:01 plus 2 hours is Saturday 15:01');
+    equal(date.addHours(0).getHours(), 15
+        , 'Saturday 15:01 plus 0 hours is Saturday 15:01');
+    equal(date.addHours(-1).getHours(), 14
+        , 'Saturday 15:01 minus 1 hour is Saturday 14:01');
+    date.addHours(-15);
+    deepEqual([date.getHours(), date.getDay()], [23, 5]
+        , 'Saturday 14:01 minus 15 hours is Friday 23:01');
+    date.addHours(25);
+    deepEqual([date.getHours(), date.getDay()], [0, 0]
+        , 'Friday 23:01 plus 25 hours is Sunday 00:01');
+  });
+
+  test('addMilliseconds', function() {
+    equal(date.addMilliseconds(750).getMilliseconds(), 750
+        , '13:01:01.000 plus 750 milliseconds is 13:01:01.750');
+    equal(date.addMilliseconds(0).getMilliseconds(), 750
+        , '13:01:01.750 plus 0 milliseconds is 13:01:01.750');
+    equal(date.addMilliseconds(-500).getMilliseconds(), 250
+        , '13:01:01.750 minus 500 milliseconds is 13:01:01.250');
+    date.addMilliseconds(-1500);
+    deepEqual([date.getMilliseconds(), date.getSeconds(), date.getMinutes()]
+        , [750, 59, 0]
+        , '13:01:01.250 minus 1500 milliseconds is 13:00:59.750');
+    date.addMilliseconds(63750);
+    deepEqual([date.getMilliseconds(), date.getSeconds(), date.getMinutes()]
+        , [500, 3, 2]
+        , '13:00:59.750 plus 63750 milliseconds is 13:02:03.500');
+  });
+
+  test('addMinutes', function() {
+    equal(date.addMinutes(2).getMinutes(), 3, '13:01 plus 2 minutes is 13:03');
+    equal(date.addMinutes(0).getMinutes(), 3, '13:03 plus 0 minutes is 13:03');
+    equal(date.addMinutes(-1).getMinutes(), 2
+        , '13:03 minus 1 minute is 13:02');
+    date.addMinutes(-3);
+    deepEqual([date.getMinutes(), date.getHours()], [59, 12]
+        , '13:02 minus 3 minutes is 12:59');
+    date.addMinutes(62);
+    deepEqual([date.getMinutes(), date.getHours()], [1, 14]
+        , '12:59 plus 62 minutes is 14:01');
+  });
+
+  test('addMonths', function() {
+    equal(date.addMonths(2).getMonth(), 2
+        , 'January 2011 plus 2 months is March 2011');
+    equal(date.addMonths(0).getMonth(), 2
+        , 'March 2011 plus 0 months is March 2011');
+    equal(date.addMonths(-1).getMonth(), 1
+        , 'March 2011 minus 1 month is February 2011');
+    date.addMonths(-3);
+    deepEqual([date.getMonth(), date.getFullYear()], [10, 2010]
+        , 'February 2011 minus 3 months is November 2010');
+    date.addMonths(14);
+    deepEqual([date.getMonth(), date.getFullYear()], [0, 2012]
+        , 'November 2010 plus 14 months is January 2012');
+  });
+
+  test('addSeconds', function() {
+    equal(date.addSeconds(2).getSeconds(), 3
+        , '13:01:01 plus 2 seconds is 13:01:03');
+    equal(date.addSeconds(0).getSeconds(), 3
+        , '13:01:03 plus 0 seconds is 13:01:03');
+    equal(date.addSeconds(-1).getSeconds(), 2
+        , '13:01:03 minus 1 second is 13:01:02');
+    date.addSeconds(-63);
+    deepEqual([date.getSeconds(), date.getMinutes(), date.getHours()]
+        , [59, 59, 12]
+        , '13:01:02 minus 63 seconds is 12:59:59');
+    date.addSeconds(3601);
+    deepEqual([date.getSeconds(), date.getMinutes(), date.getHours()]
+        , [0, 0, 14]
+        , '12:59:59 plus 3601 seconds is 14:00:00');
+  });
+
+  test('addYears', function() {
+    equal(date.addYears(2).getFullYear(), 2013, '2011 plus 2 years is 2013');
+    equal(date.addYears(0).getFullYear(), 2013, '2013 plus 0 years is 2013');
+    equal(date.addYears(-1).getFullYear(), 2012, '2013 minus 1 year is 2012');
+  });
+
   // `clear` tests
   // -------------
 
@@ -73,7 +176,8 @@
   });
 
   test('format - escape sequence', function() {
-    equal(date.format('\\'), '\\', 'Single escape character outputs corectly');
+    equal(date.format('\\'), '\\'
+        , 'Single escape character outputs correctly');
     equal(date.format('\\\\'), '\\', 'Escape character escapes itself');
     equal(date.format('\\j'), 'j'
         , 'Special characters are escaped by preceding escape character');
@@ -266,6 +370,49 @@
     ok(date.isLeapYear(), '2000 is a leap year');
     date.setFullYear(1900);
     ok(!date.isLeapYear(), '1900 is not a leap year');
+  });
+
+  // `schedule` tests
+  // ----------------
+
+  test('schedule - argument handling and date interpretation', 3, function() {
+    var ctx = { foo: 'bar' }
+      , scheduleId = date.schedule();
+    equal(scheduleId, null
+        , 'Nothing is scheduled if no callback was provided');
+    scheduleId = Date.schedule(null, function() {
+      equal(this, ctx, 'Context is applied to callback when called');
+    }, ctx);
+    equal(scheduleId, null
+        , 'Nothing is scheduled if date is not in the future');
+  });
+
+  asyncTest('schedule - asynchronous scheduling', 2, function() {
+    date = new Date();
+    var scheduleId = (new Date()).addMilliseconds(100).schedule(function() {
+      ok(new Date() - date >= 100, 'Callback is called after sheduled time');
+      start();
+    });
+    notEqual(scheduleId, null, 'Callback is scheduled');
+  });
+
+  // `unschedule` tests
+  // ------------------
+
+  test('unschedule', 2, function() {
+    ok(!Date.unschedule()
+        , 'Nothing is unscheduled if no schedule identifier is provided');
+    date = (new Date()).addMilliseconds(100);
+    QUnit.stop();
+    var scheduleId = date.schedule(function() {
+      // This should never be reached
+      ok(false, 'Callback is not called after being unscheduled');
+      start();
+    });
+    ok(date.unschedule(scheduleId), 'Callback is no longer scheduled');
+    setTimeout(function() {
+      start();
+    }, 200);
   });
 
 }());

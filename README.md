@@ -34,8 +34,8 @@ Want to schedule a function to be called at a certain time? Well, it couldn't
 be any easier.
 
 ``` javascript
-Date.schedule(date, callback)
-new Date().schedule(callback)
+Date.schedule(date, callback[, context])
+new Date().schedule(callback[, context])
 ```
 
 If the date is *now* or in the past it will simply be called immediately. Also,
@@ -56,6 +56,13 @@ The library also comes packed with a few more simple - yet extremely useful -
 everyday methods.
 
 ``` javascript
+new Date().addDays(days)
+new Date().addHours(hours)
+new Date().addMilliseconds(milliseconds)
+new Date().addMinutes(minutes)
+new Date().addMonths(months)
+new Date().addSeconds(seconds)
+new Date().addYears(years)
 new Date().clear()
 new Date().clearDate()
 new Date().clearTime()
