@@ -11,12 +11,12 @@
 [date.js][] is a JavaScript library for extending `Date` objects with useful
 everyday methods.
 
-## Diff'ing
+## Installation
 
-Always wanted an easy way to diff two dates? Now you have a variety of options.
+Install from [npm][]:
 
-``` javascript
-new Date().diff(date[, list])
+``` bash
+$ npm install date-js
 ```
 
 ## Formatting
@@ -30,12 +30,12 @@ new Date().format(formatStr)
 
 ## Scheduling
 
-Want to schedule a function to be called at a certain time? Well, it couldn't be
-any easier.
+Want to schedule a function to be called at a certain time? Well, it couldn't
+be any easier.
 
 ``` javascript
-Date.schedule(date, function)
-new Date().schedule(function)
+Date.schedule(date, callback)
+new Date().schedule(callback)
 ```
 
 If the date is *now* or in the past it will simply be called immediately. Also,
@@ -74,8 +74,8 @@ currently in development you can do so here;
 
 https://github.com/neocotic/date.js/issues
 
-Developers should run all tests in `test/index.html` and ensure they pass before
-submitting a pull request.
+Developers should run all tests in `test/index.html` and ensure they pass
+before submitting a pull request.
 
 ## Questions?
 
@@ -92,3 +92,4 @@ http://neocotic.com/date.js
 [@neocotic]: https://twitter.com/#!/neocotic
 [date.js]: http://neocotic.com/date.js
 [date function]: http://php.net/manual/en/function.date.php
+[npm]: http://npmjs.org

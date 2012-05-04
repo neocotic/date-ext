@@ -1,5 +1,5 @@
 {
-  "name"        : "date",
+  "name"        : "date-js",
   "description" : "Library for extending JavaScript dates",
   "version"     : "1.0.1",
   "homepage"    : "http://neocotic.com/date.js",
