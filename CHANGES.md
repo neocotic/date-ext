@@ -1,4 +1,4 @@
-YYYY.MM.DD, Version 1.0.2
+2012.05.08, Version 1.0.2
 
 * [#3](https://github.com/neocotic/date-ext/issues/3): Add guards to method declarations to prevent overriding future additions
 * [#3](https://github.com/neocotic/date-ext/issues/3): Rename project to `date-ext`
