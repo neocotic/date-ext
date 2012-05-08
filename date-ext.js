@@ -1,8 +1,8 @@
-// [date.js](http://neocotic.com/date.js) 1.0.1  
+// [date-ext](http://neocotic.com/date-ext) 1.0.2  
 // (c) 2012 Alasdair Mercer  
 // Freely distributable under the MIT license.  
 // For all details and documentation:  
-// <http://neocotic.com/date.js>
+// <http://neocotic.com/date-ext>
 
 (function() {
 
@@ -52,6 +52,17 @@
     return date;
   }
 
+  // Extend the `Date` object with the new function.
+  function extend(name, proto, func) {
+    if (proto) {
+      if ('function' !== typeof Date.prototype[name]) {
+        Date.prototype[name] = func;
+      }
+    } else {
+      if ('function' !== typeof Date[name]) Date[name] = func;
+    }
+  }
+
   // Format the given `date` using the format string provided.
   function format(date, formatStr, params) {
     // Use `F_RFC_2822` if no format string was specified.
@@ -94,7 +105,7 @@
         , w: w
           // Day of the year.  
           // **Example**: `0` to `365`
-        , z: date.getDayOfYear()
+        , z: getDayOfYear(date)
           /* Week */
           // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) week number of
           // year, weeks starting on Monday.  
@@ -115,11 +126,11 @@
         , n: n + 1
           // Number of days in the given month.  
           // **Example**: `28` to `31`
-        , t: date.getDaysInMonth()
+        , t: getDaysInMonth(date)
           /* Year */
           // Whether it's a leap year.  
           // **Example**: `0` (false) to `1` (true)
-        , L: date.isLeapYear() ? 1 : 0
+        , L: isLeapYear(date) ? 1 : 0
           // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) year number.
           // This has the same value as *Y*, except that if the ISO week number
           // (*W*) belongs to the previous or next year, that year is used
@@ -174,7 +185,7 @@
         , e: e ? e[0] : ''
           // Whether or not the date is in daylight saving time.  
           // **Example**: `0` (false) to `1` (true)
-        , I: date.isDaylightSavingTime() ? 1 : 0
+        , I: isDaylightSavingTime(date) ? 1 : 0
           // Difference to Greenwich time (GMT) in hours.  
           // **Example**: `+0200`
         , O: parseTimezoneOffset(date)
@@ -217,6 +228,17 @@
     });
   }
 
+  // Return the day of the year for `date`.
+  function getDayOfYear(date) {
+    var start = new Date(date.getFullYear(), 0, 1);
+    return Math.floor((date - start) / 1000 / 60 / 60 / 24);
+  }
+
+  // Return the days in the month for `date`.
+  function getDaysInMonth(date) {
+    return (new Date(date.getFullYear(), date.getMonth() + 1, 0)).getDate();
+  }
+
   // Determine the [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601)
   // information for the given `date`.
   function getISODate(date) {
@@ -247,6 +269,18 @@
     return Math.floor(time * 1000 / 24);
   }
 
+  // Return whether or not `date` is in daylight saving time.
+  function isDaylightSavingTime(date) {
+    var start = new Date(date);
+    start.setMonth(0, 1);
+    return start.getTimezoneOffset() !== date.getTimezoneOffset();
+  }
+
+  // Return whether or not `date` is in a leap year.
+  function isLeapYear(date) {
+    return 1 === (new Date(date.getFullYear(), 1, 29)).getMonth();
+  }
+
   // Apply left padding of zero characters to the given `value` to ensure
   // consistent sizes.
   function pad(value, size) {
@@ -266,109 +300,10 @@
     return ((offset > 0) ? '-' : '+') + parsed;
   }
 
-  // Public functions
-  // ----------------
-
-  // Add/subtract the specified number of `days` from the current date.
-  Date.prototype.addDays = function(days) {
-    return addToField(this, 'Date', days);
-  };
-
-  // Add/subtract the specified number of `hours` from the current date.
-  Date.prototype.addHours = function(hours) {
-    return addToField(this, 'Hours', hours);
-  };
-
-  // Add/subtract the specified number of `milliseconds` from the current date.
-  Date.prototype.addMilliseconds = function(milliseconds) {
-    return addToField(this, 'Milliseconds', milliseconds);
-  };
-
-  // Add/subtract the specified number of `minutes` from the current date.
-  Date.prototype.addMinutes = function(minutes) {
-    return addToField(this, 'Minutes', minutes);
-  };
-
-  // Add/subtract the specified number of `months` from the current date.
-  Date.prototype.addMonths = function(months) {
-    return addToField(this, 'Month', months);
-  };
-
-  // Add/subtract the specified number of `seconds` from the current date.
-  Date.prototype.addSeconds = function(seconds) {
-    return addToField(this, 'Seconds', seconds);
-  };
-
-  // Add/subtract the specified number of `years` from the current date.
-  Date.prototype.addYears = function(years) {
-    return addToField(this, 'FullYear', years);
-  };
-
-  // Clear the date and time fields for the current date.
-  Date.prototype.clear = function() {
-    this.clearDate();
-    this.clearTime();
-    return this;
-  };
-
-  // Clear the date fields for the current date.
-  Date.prototype.clearDate = function() {
-    this.setFullYear(0, 0, 1);
-    return this;
-  };
-
-  // Clear the time fields for the current date.
-  Date.prototype.clearTime = function() {
-    this.setHours(0, 0, 0, 0);
-    return this;
-  };
-
-  // Format the current date using the format string provided.
-  Date.prototype.format = function(formatStr) {
-    return format(this, formatStr);
-  };
-
-  // Return the day of the year for the current date.
-  Date.prototype.getDayOfYear = function() {
-    var start = new Date(this.getFullYear(), 0, 1);
-    return Math.floor((this - start) / 1000 / 60 / 60 / 24);
-  };
-
-  // Return the days in the month for the current date.
-  Date.prototype.getDaysInMonth = function() {
-    return (new Date(this.getFullYear(), this.getMonth() + 1, 0)).getDate();
-  };
-
-  // Return the [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) week number
-  // of the year for the current date.
-  Date.prototype.getWeekOfYear = function() {
-    return getISODate(this).week;
-  };
-
-  // Return the [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) year number.
-  // This has the same value as `getFullYear`, except that if the ISO week
-  // number (`getWeekOfYear`) belongs to the previous or next year, that year
-  // is used instead.
-  Date.prototype.getYearOfWeek = function() {  
-    return getISODate(this).year;
-  };
-
-  // Return whether or not the current date is in daylight saving time.
-  Date.prototype.isDaylightSavingTime = function() {
-    var start = new Date(this);
-    start.setMonth(0, 1);
-    return start.getTimezoneOffset() !== this.getTimezoneOffset();
-  };
-
-  // Return whether or not the current date is in a leap year.
-  Date.prototype.isLeapYear = function() {
-    return 1 === (new Date(this.getFullYear(), 1, 29)).getMonth();
-  };
-
   // Schedule the function provided to be called when `date` is reached.  
   // `callback` will be called immediately if `date` is *now* or in the past.  
   // Return a `scheduleId` for possible use with `unschedule`.
-  Date.schedule = function(date, callback, context) {
+  function schedule(date, callback, context) {
     // Handle optional arguments accordingly.
     if ('string' === typeof callback) {
       context = callback;
@@ -400,19 +335,10 @@
       }
     }
     return scheduleId;
-  };
-
-  // Schedule the function provided to be called when the current date is
-  // reached.  
-  // `callback` will be called immediately if current date is *now* or in the
-  // past.  
-  // Return a `scheduleId` for possible use with `unschedule`.
-  Date.prototype.schedule = function(callback, context) {
-    return Date.schedule(this, callback, context);
-  };
+  }
 
   // Prevent a scheduled function from being called.
-  Date.unschedule = Date.prototype.unschedule = function(scheduleId) {
+  function unschedule(scheduleId) {
     var idx = tasks.indexOf(scheduleId);
     if (idx > -1) {
       clearTimeout(scheduleId);
@@ -420,6 +346,127 @@
       return true;
     }
     return false;
-  };
+  }
+
+  // Public functions
+  // ----------------
+
+  // Add/subtract the specified number of `days` from the current date.
+  extend('addDays', true, function(days) {
+    return addToField(this, 'Date', days);
+  });
+
+  // Add/subtract the specified number of `hours` from the current date.
+  extend('addHours', true, function(hours) {
+    return addToField(this, 'Hours', hours);
+  });
+
+  // Add/subtract the specified number of `milliseconds` from the current date.
+  extend('addMilliseconds', true, function(milliseconds) {
+    return addToField(this, 'Milliseconds', milliseconds);
+  });
+
+  // Add/subtract the specified number of `minutes` from the current date.
+  extend('addMinutes', true, function(minutes) {
+    return addToField(this, 'Minutes', minutes);
+  });
+
+  // Add/subtract the specified number of `months` from the current date.
+  extend('addMonths', true, function(months) {
+    return addToField(this, 'Month', months);
+  });
+
+  // Add/subtract the specified number of `seconds` from the current date.
+  extend('addSeconds', true, function(seconds) {
+    return addToField(this, 'Seconds', seconds);
+  });
+
+  // Add/subtract the specified number of `years` from the current date.
+  extend('addYears', true, function(years) {
+    return addToField(this, 'FullYear', years);
+  });
+
+  // Clear the date and time fields for the current date.
+  extend('clear', true, function() {
+    this.clearDate();
+    this.clearTime();
+    return this;
+  });
+
+  // Clear the date fields for the current date.
+  extend('clearDate', true, function() {
+    this.setFullYear(0, 0, 1);
+    return this;
+  });
+
+  // Clear the time fields for the current date.
+  extend('clearTime', true, function() {
+    this.setHours(0, 0, 0, 0);
+    return this;
+  });
+
+  // Format `date` using the format string provided.
+  extend('format', false, function(date, formatStr) {
+    return format(date, formatStr);
+  });
+
+  // Format the current date using the format string provided.
+  extend('format', true, function(formatStr) {
+    return format(this, formatStr);
+  });
+
+  // Return the day of the year for the current date.
+  extend('getDayOfYear', true, function() {
+    return getDayOfYear(this);
+  });
+
+  // Return the days in the month for the current date.
+  extend('getDaysInMonth', true, function() {
+    return getDaysInMonth(this);
+  });
+
+  // Return the [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) week number
+  // of the year for the current date.
+  extend('getWeekOfYear', true, function() {
+    return getISODate(this).week;
+  });
+
+  // Return the [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) year number.
+  // This has the same value as `getFullYear`, except that if the ISO week
+  // number (`getWeekOfYear`) belongs to the previous or next year, that year
+  // is used instead.
+  extend('getYearOfWeek', true, function() {  
+    return getISODate(this).year;
+  });
+
+  // Return whether or not the current date is in daylight saving time.
+  extend('isDaylightSavingTime', true, function() {
+    return isDaylightSavingTime(this);
+  });
+
+  // Return whether or not the current date is in a leap year.
+  extend('isLeapYear', true, function() {
+    return isLeapYear(this);
+  });
+
+  // Schedule the function provided to be called when `date` is reached.  
+  // `callback` will be called immediately if `date` is *now* or in the past.  
+  // Return a `scheduleId` for possible use with `unschedule`.
+  extend('schedule', false, function(date, callback, context) {
+    return schedule(date, callback, context);
+  });
+
+  // Schedule the function provided to be called when the current date is
+  // reached.  
+  // `callback` will be called immediately if current date is *now* or in the
+  // past.  
+  // Return a `scheduleId` for possible use with `unschedule`.
+  extend('schedule', true, function(callback, context) {
+    return schedule(this, callback, context);
+  });
+
+  // Prevent a scheduled function from being called.
+  extend('unschedule', false, unschedule);
+  extend('unschedule', true, unschedule);
 
 }());
