@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/neocotic/date-ext.png)](http://travis-ci.org/neocotic/date-ext)
       __            __                                 __      
      /\ \          /\ \__                             /\ \__   
      \_\ \     __  \ \ ,_\    __             __  __  _\ \ ,_\  
