@@ -65,7 +65,7 @@
 
   // Format the given `date` using the format string provided.
   function format(date, formatStr, params) {
-    if (date === null) return '';
+    if (date == null) return '';
     // Use `F_RFC_2822` if no format string was specified.
     if ('string' !== typeof formatStr) formatStr = F_RFC_2822;
     // Only populate `params` if it hasn't already been (for this call route).
