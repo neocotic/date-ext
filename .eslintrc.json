@@ -1,0 +1,17 @@
+{
+  "extends": "notninja/es5",
+  "env": {
+    "amd": true,
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "capitalized-comments": "off",
+    "no-extend-native": "off",
+    "no-invalid-this": "off",
+    "strict": [
+      "error",
+      "function"
+    ]
+  }
+}

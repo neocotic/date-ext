@@ -23,12 +23,14 @@
     "url": "https://github.com/neocotic/date-ext.git"
   },
   "devDependencies": {
+    "eslint-config-notninja": "^0.2.3",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-qunit": "^2.0.0",
     "grunt-contrib-uglify": "^3.1.0",
+    "grunt-eslint": "^20.1.0",
     "load-grunt-tasks": "^3.5.2",
     "qunitjs": "^2.4.0"
   },

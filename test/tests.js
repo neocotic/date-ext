@@ -1,4 +1,5 @@
 (function() {
+  'use strict';
 
   // Test setup
   // ----------
@@ -118,7 +119,7 @@
 
     date.addSeconds(-63);
 
-    assert.deepEqual([ date.getSeconds(), date.getMinutes(), date.getHours() ] , [ 59, 59, 12 ],
+    assert.deepEqual([ date.getSeconds(), date.getMinutes(), date.getHours() ], [ 59, 59, 12 ],
       '13:01:02 minus 63 seconds is 12:59:59');
 
     date.addSeconds(3601);
@@ -222,7 +223,7 @@
       [ '07', 'Fri', '7', 'Friday', '5', 'th', '5', '6' ]
     ];
 
-    assert.expect(results.length + 2)
+    assert.expect(results.length + 2);
 
     for (var i = 0; i < results.length; i++) {
       date.setDate(i + 1);
@@ -306,13 +307,13 @@
     assert.expect(2);
 
     assert.deepEqual(date.format('a A B g G h H i s u').split(' '),
-      [ 'pm', 'PM', '584', '1',  '13', '01', '13', '01', '01', '000000' ],
+      [ 'pm', 'PM', '584', '1', '13', '01', '13', '01', '01', '000000' ],
       '"a", "A", "B", "g", "G", "h", "H", "i", "s", and "u" parameters are correct for ' + date.toLocaleTimeString());
 
     date.setHours(0, 59, 59, 999);
 
     assert.deepEqual(date.format('a A B g G h H i s u').split(' '),
-      [ 'am', 'AM', '83',  '12', '0',  '12', '00', '59', '59', '999000' ],
+      [ 'am', 'AM', '83', '12', '0', '12', '00', '59', '59', '999000' ],
       '"a", "A", "B", "g", "G", "h", "H", "i", "s", and "u" parameters are correct for ' + date.toLocaleTimeString());
   });
 
@@ -519,5 +520,4 @@
 
     assert.ok(!Date.unschedule(), 'Nothing is unscheduled if no schedule identifier is provided');
   });
-
-})();
+}());

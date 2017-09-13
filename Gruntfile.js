@@ -1,9 +1,7 @@
+/* eslint-disable global-require */
+
 module.exports = function(grunt) {
-
   'use strict';
-
-  // Configuration
-  // -------------
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -21,6 +19,14 @@ module.exports = function(grunt) {
       }
     },
 
+    eslint: {
+      target: [
+        'lib/**/*.js',
+        'test/**/*.js',
+        'Gruntfile.js'
+      ]
+    },
+
     qunit: {
       all: {
         options: {
@@ -36,10 +42,8 @@ module.exports = function(grunt) {
         }
       },
       options: {
-        banner: (
-          '/*! date-ext v<%= pkg.version %> | (C) <%= grunt.template.today("yyyy") %>  <%= pkg.author.name %> | ' +
-          '<%= pkg.license %> License */'
-        ),
+        banner: '/*! date-ext v<%= pkg.version %> | (C) <%= grunt.template.today("yyyy") %>  <%= pkg.author.name %> ' +
+          '| <%= pkg.license %> License */',
         report: 'min',
         sourceMap: true,
         sourceMapName: 'dist/date-ext.min.map'
@@ -47,14 +51,10 @@ module.exports = function(grunt) {
     }
   });
 
-  // Tasks
-  // -----
-
   require('load-grunt-tasks')(grunt);
 
   grunt.registerTask('default', [ 'ci' ]);
-  grunt.registerTask('build', [ 'clean:build', 'uglify' ]);
-  grunt.registerTask('ci', [ 'clean', 'uglify', 'connect', 'qunit' ]);
-  grunt.registerTask('test', [ 'connect', 'qunit' ]);
-
+  grunt.registerTask('build', [ 'eslint', 'clean:build', 'uglify' ]);
+  grunt.registerTask('ci', [ 'eslint', 'clean', 'uglify', 'connect', 'qunit' ]);
+  grunt.registerTask('test', [ 'eslint', 'connect', 'qunit' ]);
 };
