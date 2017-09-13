@@ -1,0 +1,36 @@
+{
+  "name": "date-ext",
+  "version": "1.1.0",
+  "description": "Library for extending JavaScript dates",
+  "homepage": "https://github.com/neocotic/date-ext",
+  "authors": [
+    {
+      "name": "Alasdair Mercer",
+      "email": "mercer.alasdair@gmail.com",
+      "homepage": "https://neocotic.com"
+    }
+  ],
+  "licenses": "MIT",
+  "keywords": [
+    "date",
+    "extend",
+    "format",
+    "iso"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neocotic/date-ext.git"
+  },
+  "main": "lib/date-ext.js",
+  "ignore": [
+    "test/",
+    ".*",
+    "AUTHORS.md",
+    "CHANGES.md",
+    "CONTRIBUTING.md",
+    "Gruntfile.js",
+    "package.json",
+    "package-lock.json",
+    "README.md"
+  ]
+}
