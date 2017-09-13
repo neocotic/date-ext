@@ -35,7 +35,7 @@ $ bower install --save date-ext
 If you want to simply download the file to be used in the browser you can find them below:
 
 * [Development Version](https://cdn.rawgit.com/neocotic/date-ext/master/lib/date-ext.js) (21kb)
-* [Production Version](https://cdn.rawgit.com/neocotic/date-ext/master/dist/date-ext.min.js) (5.3kb - [Source Map](https://cdn.rawgit.com/neocotic/date-ext/master/dist/date-ext.min.map))
+* [Production Version](https://cdn.rawgit.com/neocotic/date-ext/master/dist/date-ext.min.js) (5.4kb - [Source Map](https://cdn.rawgit.com/neocotic/date-ext/master/dist/date-ext.min.map))
 
 ## API
 
