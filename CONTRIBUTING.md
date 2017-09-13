@@ -1,15 +1,26 @@
-# Build Requirements
-In order to build [date-ext][], you need to have the following install [git][] 1.7+ and the latest version of [node.js][] 0.6+ (which includes [npm][]).
+# Contributing
 
-# Building
-Follow these steps to build [date-ext][];
+If you have any questions about date-ext](https://github.com/neocotic/date-ext) please feel free to
+[raise an issue](https://github.com/neocotic/date-ext/issues/new).
 
-1. Clone a copy of the main [date-ext git repository](https://github.com/neocotic/date-ext) by running `git clone git://github.com/neocotic/date-ext.git`
-2. `cd` to the repository directory
-3. Ensure you have all of the dependencies by entering `npm install`
-4. For the optimized version enter `npm run ci`
+Please [search existing issues](https://github.com/neocotic/date-ext/issues) for the same feature and/or issue before
+raising a new issue. Commenting on an existing issue is usually preferred over raising duplicate issues.
 
-[date-ext]: http://neocotic.com/date-ext
-[git]: http://git-scm.com
-[node.js]: http://nodejs.org
-[npm]: http://npmjs.org
+Please ensure that all files conform to the coding standards, using the same coding style as the rest of the code base.
+All unit tests should be updated and passing as well. All of this can easily be checked via command-line:
+
+``` bash
+# install/update package dependencies
+$ npm install
+# run build & test suite
+$ npm run ci
+```
+
+You must have at least [Node.js](https://nodejs.org) version 4 or newer and [npm](https://npmjs.com) version 5 or newer
+installed.
+
+All pull requests should be made to the `develop` branch.
+
+Don't forget to add your details to the list of
+[AUTHORS.md](https://github.com/neocotic/date-ext/blob/master/AUTHORS.md) if you want your contribution to be recognized
+by others.
