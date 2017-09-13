@@ -395,6 +395,15 @@
     assert.equal(date.getDaysInMonth(), 29, 'February has 29 days in a leap year');
   });
 
+  // `getTimezone` tests
+  // ----------------------
+
+  QUnit.test('getTimezone', function(assert) {
+    assert.expect(1);
+
+    assert.ok(date.getTimezone(), 'Timezone is extracted');
+  });
+
   // `getWeekOfYear` tests
   // ---------------------
 
