@@ -1,0 +1,7 @@
+test/
+.*
+AUTHORS.md
+Cakefile
+CHANGES.md
+INSTALL.md
+README.md
