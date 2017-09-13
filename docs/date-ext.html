@@ -218,7 +218,7 @@ of the year for the current date.</p>             </td>             <td class="c
   <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-91">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-91">&#182;</a>               </div>               <p>Return the <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> year number.
 This has the same value as <code>getFullYear</code>, except that if the ISO week
 number (<code>getWeekOfYear</code>) belongs to the previous or next year, that year
-is used instead.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">extend</span><span class="p">(</span><span class="s1">&#39;getYearOfWeek&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>  
+is used instead.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">extend</span><span class="p">(</span><span class="s1">&#39;getYearOfWeek&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">getISODate</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">year</span><span class="p">;</span>
   <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-92">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-92">&#182;</a>               </div>               <p>Return whether or not the current date is in daylight saving time.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">extend</span><span class="p">(</span><span class="s1">&#39;isDaylightSavingTime&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">isDaylightSavingTime</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
@@ -239,4 +239,4 @@ Return a <code>scheduleId</code> for possible use with <code>unschedule</code>.<
 
 <span class="p">}());</span>
 
-</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html>

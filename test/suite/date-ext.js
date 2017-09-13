@@ -3,7 +3,7 @@
   // Test setup
   // ----------
 
-      // Default date under test. Create a copy for each test to preserve it.  
+      // Default date under test. Create a copy for each test to preserve it.
       // `Sat Jan 01 2011 13:01:01 GMT+0000 (GMT Standard Time)`
   var date
       // ISO 8601 string for the default date under test.

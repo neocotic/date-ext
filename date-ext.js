@@ -1,7 +1,7 @@
 // [date-ext](http://neocotic.com/date-ext) 1.0.2  
-// (c) 2012 Alasdair Mercer  
-// Freely distributable under the MIT license.  
-// For all details and documentation:  
+// (c) 2012 Alasdair Mercer
+// Freely distributable under the MIT license.
+// For all details and documentation:
 // <http://neocotic.com/date-ext>
 
 (function() {
@@ -82,136 +82,136 @@
       // [PHP date](http://php.net/manual/en/function.date.php).
       params = {
           /* Day */
-          // Day of the month, 2 digits with leading zeros.  
+          // Day of the month, 2 digits with leading zeros.
           // **Example**: `01` to `31`
           d: pad(j)
-          // Textual representation of a day, three letters.  
+          // Textual representation of a day, three letters.
           // **Example**: `Mon` to `Sun`
         , D: DAYS[w]
-          // Day of the month, without leading zeros.  
+          // Day of the month, without leading zeros.
           // **Example**: `1` to `31`
         , j: j
-          // Full textual representation of the day of the week.  
+          // Full textual representation of the day of the week.
           // **Example**: 'Monday` to `Sunday`
         , l: DAYS[w + 7]
           // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) numeric
-          // representation of the day of the week.  
+          // representation of the day of the week.
           // **Example**: `1` (for Monday) to `7` (for Sunday)
         , N: w || 7
-          // English ordinal suffix for the day of the month, 2 characters.  
+          // English ordinal suffix for the day of the month, 2 characters.
           // **Example**: `st`, `nd`, `rd` or `th` (works well with *j*)
         , S: ORDINALS[(j % 10 > 3) ? 0 : (j % 100 - j % 10 !== 10) * j % 10]
-          // Numeric representation of the day of the week.  
+          // Numeric representation of the day of the week.
           // **Example**: `0` (for Sunday) to `6` (for Saturday)
         , w: w
-          // Day of the year.  
+          // Day of the year.
           // **Example**: `0` to `365`
         , z: getDayOfYear(date)
           /* Week */
           // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) week number of
-          // year, weeks starting on Monday.  
+          // year, weeks starting on Monday.
           // **Example**: `42` (the 42nd week in the year)
         , W: iso.week
           /* Month */
-          // Full textual representation of a month.  
+          // Full textual representation of a month.
           // **Example**: `January` to `December`
         , F: MONTHS[n + 12]
-          // Numeric representation of a month, with leading zeros.  
+          // Numeric representation of a month, with leading zeros.
           // **Example**: `01` to `12`
         , m: pad(n + 1)
-          // Textual representation of a month, three letters.  
+          // Textual representation of a month, three letters.
           // **Example**: `Jan` to `Dec`
         , M: MONTHS[n]
-          // Numeric representation of a month, without leading zeros.  
+          // Numeric representation of a month, without leading zeros.
           // **Example**: `1` to `12`
         , n: n + 1
-          // Number of days in the given month.  
+          // Number of days in the given month.
           // **Example**: `28` to `31`
         , t: getDaysInMonth(date)
           /* Year */
-          // Whether it's a leap year.  
+          // Whether it's a leap year.
           // **Example**: `0` (false) to `1` (true)
         , L: isLeapYear(date) ? 1 : 0
           // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) year number.
           // This has the same value as *Y*, except that if the ISO week number
           // (*W*) belongs to the previous or next year, that year is used
-          // instead.  
+          // instead.
           // **Example**: `1999` or `2003`
         , o: iso.year
-          // Full numeric representation of a year, 4 digits.  
+          // Full numeric representation of a year, 4 digits.
           // **Example**: `1999` or `2003`
         , Y: Y
-          // Numeric representation of a year, 2 digits.  
+          // Numeric representation of a year, 2 digits.
           // **Example**: `99` or `03`
         , y: String(Y).slice(2)
           /* Time */
-          // Lowercase Ante meridiem and Post meridiem.  
+          // Lowercase Ante meridiem and Post meridiem.
           // **Example**: `am` or `pm`
         , a: (G < 12) ? 'am' : 'pm'
-          // Uppercase Ante meridiem and Post meridiem.  
+          // Uppercase Ante meridiem and Post meridiem.
           // **Example**: `AM` or `PM`
         , A: (G < 12) ? 'AM' : 'PM'
           // [Swatch Internet
-          // Time](http://en.wikipedia.org/wiki/Swatch_Internet_Time).  
+          // Time](http://en.wikipedia.org/wiki/Swatch_Internet_Time).
           // **Example**: `000` to `999`
         , B: getSwatchInternetTime(date)
-          // 12-hour format of an hour, without leading zeros.  
+          // 12-hour format of an hour, without leading zeros.
           // **Example**: `1` to `12`
         , g: G % 12 || 12
-          // 24-hour format of an hour, without leading zeros.  
+          // 24-hour format of an hour, without leading zeros.
           // **Example**: `0` to `23`
         , G: G
-          // 12-hour format of an hour, with leading zeros.  
+          // 12-hour format of an hour, with leading zeros.
           // **Example**: `01` to `12`
         , h: pad(G % 12 || 12)
-          // 24-hour format of an hour, with leading zeros.  
+          // 24-hour format of an hour, with leading zeros.
           // **Example**: `00` to `23`
         , H: pad(G)
-          // Minutes, with leading zeros.  
+          // Minutes, with leading zeros.
           // **Example**: `00` to `59`
         , i: pad(date.getMinutes())
-          // Seconds, with leading zeros.  
+          // Seconds, with leading zeros.
           // **Example**: `00` to `59`
         , s: pad(date.getSeconds())
-          // Microseconds.  
+          // Microseconds.
           // **Example**: `654000`
         , u: pad(date.getMilliseconds() * 1000, 6)
           /* Timezone */
-          // Timezone identifier.  
+          // Timezone identifier.
           // Unfortunately, it doesn't seem possible to replicate the same
           // behaviour as [PHP
           // date](http://php.net/manual/en/function.date.php) here, so this
-          // currently duplicates *T*.  
+          // currently duplicates *T*.
           // **Example**: `UTC` or `GMT`
         , e: e ? e[0] : ''
-          // Whether or not the date is in daylight saving time.  
+          // Whether or not the date is in daylight saving time.
           // **Example**: `0` (false) to `1` (true)
         , I: isDaylightSavingTime(date) ? 1 : 0
-          // Difference to Greenwich time (GMT) in hours.  
+          // Difference to Greenwich time (GMT) in hours.
           // **Example**: `+0200`
         , O: parseTimezoneOffset(date)
           // Difference to Greenwich time (GMT), with colon between hours and
-          // minutes.  
+          // minutes.
           // **Example**: `+02:00`
         , P: parseTimezoneOffset(date, ':')
-          // Timezone abbreviation.  
+          // Timezone abbreviation.
           // **Example**: `UTC` or `GMT`
         , T: e ? e[0] : ''
           // Timezone offset in seconds. The offset for timezones west of UTC
           // is always negative, and for those east of UTC is always
-          // positive.  
+          // positive.
           // **Example**: `-43200` to `50400`
         , Z: date.getTimezoneOffset() * -60
           /* Full Date/Time */
           // [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) formatted
-          // date.  
+          // date.
           // **Example**: `2004-02-12T15:19:21+00:00`
         , c: ''
           // [RFC 2822](http://www.faqs.org/rfcs/rfc2822.html) formatted
-          // date.  
+          // date.
           // **Example**: `Thu, 21 Dec 2000 16:01:07 +0200`
         , r: ''
-          // Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT).  
+          // Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT).
           // **Example**: `1293886861`
         , U: Math.round(date.getTime() / 1000)
       };
@@ -301,8 +301,8 @@
     return ((offset > 0) ? '-' : '+') + parsed;
   }
 
-  // Schedule the function provided to be called when `date` is reached.  
-  // `callback` will be called immediately if `date` is *now* or in the past.  
+  // Schedule the function provided to be called when `date` is reached.
+  // `callback` will be called immediately if `date` is *now* or in the past.
   // Return a `scheduleId` for possible use with `unschedule`.
   function schedule(date, callback, context) {
     // Handle optional arguments accordingly.
@@ -436,7 +436,7 @@
   // This has the same value as `getFullYear`, except that if the ISO week
   // number (`getWeekOfYear`) belongs to the previous or next year, that year
   // is used instead.
-  extend('getYearOfWeek', true, function() {  
+  extend('getYearOfWeek', true, function() {
     return getISODate(this).year;
   });
 
@@ -450,17 +450,17 @@
     return isLeapYear(this);
   });
 
-  // Schedule the function provided to be called when `date` is reached.  
-  // `callback` will be called immediately if `date` is *now* or in the past.  
+  // Schedule the function provided to be called when `date` is reached.
+  // `callback` will be called immediately if `date` is *now* or in the past.
   // Return a `scheduleId` for possible use with `unschedule`.
   extend('schedule', false, function(date, callback, context) {
     return schedule(date, callback, context);
   });
 
   // Schedule the function provided to be called when the current date is
-  // reached.  
+  // reached.
   // `callback` will be called immediately if current date is *now* or in the
-  // past.  
+  // past.
   // Return a `scheduleId` for possible use with `unschedule`.
   extend('schedule', true, function(callback, context) {
     return schedule(this, callback, context);
