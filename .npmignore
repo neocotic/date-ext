@@ -1,7 +1,8 @@
+dist/
 test/
 .*
 AUTHORS.md
-Cakefile
 CHANGES.md
 CONTRIBUTING.md
+Gruntfile.js
 README.md
