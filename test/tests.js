@@ -24,17 +24,18 @@
   // Test setup
   // ----------
 
+  // ISO 8601 string for the default date under test.
+  var ISO_8601 = '2011-01-01T13:01:01+00:00';
+  // RFC 2822 string for the default date under test.
+  var RFC_2822 = 'Sat, 1 Jan 2011 13:01:01 +0000';
+
   // Default date under test. Create a copy for each test to preserve it.
   // `Sat Jan 01 2011 13:01:01 GMT+0000 (GMT Standard Time)`
   var date;
-  // ISO 8601 string for the default date under test.
-  var iso8601 = '2011-01-01T13:01:01+00:00';
-  // RFC 2822 string for the default date under test.
-  var rfc2822 = 'Sat, 1 Jan 2011 13:01:01 +0000';
 
   QUnit.module('Date', {
     beforeEach: function() {
-      // Reset the local date being tested.
+      // Reset the date being tested.
       date = new Date(2011, 0, 1, 13, 1, 1, 0);
     }
   });
@@ -217,7 +218,7 @@
   QUnit.test('format - default format', function(assert) {
     assert.expect(1);
 
-    assert.equal(date.format(), rfc2822, 'RFC 2822 format is used if none is defined');
+    assert.equal(date.format(), RFC_2822, 'RFC 2822 format is used if none is defined');
   });
 
   QUnit.test('format - escape sequence', function(assert) {
@@ -225,143 +226,137 @@
 
     assert.equal(date.format('\\'), '\\', 'Single escape character outputs correctly');
     assert.equal(date.format('\\\\'), '\\', 'Escape character escapes itself');
-    assert.equal(date.format('\\j'), 'j', 'Special characters are escaped by preceding escape character');
+    assert.equal(date.format('\\j\\D'), 'jD', 'Special characters are escaped by preceding escape character');
     assert.equal(date.format('\\Q'), '\\Q', 'Ignore escape character if followed by non-special character');
-    assert.equal(date.format('\\\\j'), '\\1', 'Escaped escape characters are ignored');
+    assert.equal(date.format('\\\\j\\\\D'), '\\1\\Sat', 'Escaped escape characters are ignored');
     assert.equal(date.format('\\Qj'), '\\Q1',
       'Escape characters must immediately precede special character to escape it');
   });
 
-  QUnit.test('format - day parameters', function(assert) {
-    var results = [
-      [ '01', 'Sat', '1', 'Saturday', '6', 'st', '6', '0' ],
-      [ '02', 'Sun', '2', 'Sunday', '7', 'nd', '0', '1' ],
-      [ '03', 'Mon', '3', 'Monday', '1', 'rd', '1', '2' ],
-      [ '04', 'Tue', '4', 'Tuesday', '2', 'th', '2', '3' ],
-      [ '05', 'Wed', '5', 'Wednesday', '3', 'th', '3', '4' ],
-      [ '06', 'Thu', '6', 'Thursday', '4', 'th', '4', '5' ],
-      [ '07', 'Fri', '7', 'Friday', '5', 'th', '5', '6' ]
+  QUnit.test('format - day tokens', function(assert) {
+    var expected = [
+      '01 Sat 1st Saturday 6 6 0',
+      '02 Sun 2nd Sunday 7 0 1',
+      '03 Mon 3rd Monday 1 1 2',
+      '04 Tue 4th Tuesday 2 2 3',
+      '05 Wed 5th Wednesday 3 3 4',
+      '06 Thu 6th Thursday 4 4 5',
+      '07 Fri 7th Friday 5 5 6'
     ];
 
-    assert.expect(results.length + 2);
+    assert.expect(expected.length + 2);
 
-    for (var i = 0; i < results.length; i++) {
+    for (var i = 0; i < expected.length; i++) {
       date.setDate(i + 1);
 
-      assert.deepEqual(date.format('d D j l N S w z').split(' '), results[i],
-        '"d", "D", "j", "l", "N", "S", "w", and "z" parameters are correct for ' + date.toLocaleDateString());
+      assert.equal(date.format('d D jS l N w z'), expected[i],
+        '"d", "D", "j", "S", "l", "N", "w", and "z" tokens are correct for ' + date.toLocaleDateString());
     }
 
     date.setMonth(11, 31);
 
-    assert.equal(date.format('z'), '364', '"z" parameter is correct on 31st of December');
+    assert.equal(date.format('z'), '364', '"z" token is correct on 31st of December');
 
     date.setFullYear(2008);
 
-    assert.equal(date.format('z'), '365', '"z" parameter is correct on 31st of December in a leap year');
+    assert.equal(date.format('z'), '365', '"z" token is correct on 31st of December in a leap year');
   });
 
-  QUnit.test('format - week parameters', function(assert) {
+  QUnit.test('format - week tokens', function(assert) {
     assert.expect(2);
 
-    assert.equal(date.format('W'), '52', '"W" parameter is correct');
+    assert.equal(date.format('W'), '52', '"W" token is correct');
 
     date.setDate(3);
 
-    assert.equal(date.format('W'), '1', '"W" parameter is correct for ' + date.toLocaleDateString());
+    assert.equal(date.format('W'), '1', '"W" token is correct for ' + date.toLocaleDateString());
   });
 
-  QUnit.test('format - month parameters', function(assert) {
-    var results = [
-      [ 'January', '01', 'Jan', '1', '31' ],
-      [ 'February', '02', 'Feb', '2', '28' ],
-      [ 'March', '03', 'Mar', '3', '31' ],
-      [ 'April', '04', 'Apr', '4', '30' ],
-      [ 'May', '05', 'May', '5', '31' ],
-      [ 'June', '06', 'Jun', '6', '30' ],
-      [ 'July', '07', 'Jul', '7', '31' ],
-      [ 'August', '08', 'Aug', '8', '31' ],
-      [ 'September', '09', 'Sep', '9', '30' ],
-      [ 'October', '10', 'Oct', '10', '31' ],
-      [ 'November', '11', 'Nov', '11', '30' ],
-      [ 'December', '12', 'Dec', '12', '31' ]
+  QUnit.test('format - month tokens', function(assert) {
+    var expected = [
+      'January 01 Jan 1 31',
+      'February 02 Feb 2 28',
+      'March 03 Mar 3 31',
+      'April 04 Apr 4 30',
+      'May 05 May 5 31',
+      'June 06 Jun 6 30',
+      'July 07 Jul 7 31',
+      'August 08 Aug 8 31',
+      'September 09 Sep 9 30',
+      'October 10 Oct 10 31',
+      'November 11 Nov 11 30',
+      'December 12 Dec 12 31'
     ];
 
-    assert.expect(results.length + 1);
+    assert.expect(expected.length + 1);
 
-    for (var i = 0; i < results.length; i++) {
+    for (var i = 0; i < expected.length; i++) {
       date.setMonth(i);
 
-      assert.deepEqual(date.format('F m M n t').split(' '), results[i],
-        '"F", "m", "M", "n", and "t" parameters are correct for ' + date.toLocaleDateString());
+      assert.equal(date.format('F m M n t'), expected[i], '"F", "m", "M", "n", and "t" tokens are correct for ' +
+        date.toLocaleDateString());
     }
 
     date.setFullYear(2008, 1);
 
-    assert.equal(date.format('t'), '29', '"t" parameter is correct in February of a leap year');
+    assert.equal(date.format('t'), '29', '"t" token is correct in February of a leap year');
   });
 
-  QUnit.test('format - year parameters', function(assert) {
+  QUnit.test('format - year tokens', function(assert) {
     assert.expect(4);
 
-    assert.deepEqual(date.format('L o Y y').split(' '), [ '0', '2010', '2011', '11' ],
-      '"L", "o", "Y", and "y" parameters are correct for ' + date.toLocaleDateString());
+    assert.equal(date.format('L o Y y'), '0 2010 2011 11', '"L", "o", "Y", and "y" tokens are correct for ' +
+      date.toLocaleDateString());
 
     date.setDate(3);
 
-    assert.deepEqual(date.format('L o Y y').split(' '), [ '0', '2011', '2011', '11' ],
-      '"L", "o", "Y", and "y" parameters are correct for ' + date.toLocaleDateString());
+    assert.equal(date.format('L o Y y'), '0 2011 2011 11', '"L", "o", "Y", and "y" tokens are correct for ' +
+      date.toLocaleDateString());
 
     date.setFullYear(2012, 0, 1);
 
-    assert.deepEqual(date.format('L o Y y').split(' '), [ '1', '2011', '2012', '12' ],
-      '"L", "o", "Y", and "y" parameters are correct for ' + date.toLocaleDateString());
+    assert.equal(date.format('L o Y y'), '1 2011 2012 12', '"L", "o", "Y", and "y" tokens are correct for ' +
+      date.toLocaleDateString());
 
     date.setDate(2);
 
-    assert.deepEqual(date.format('L o Y y').split(' '), [ '1', '2012', '2012', '12' ],
-      '"L", "o", "Y", and "y" parameters are correct for ' + date.toLocaleDateString());
+    assert.equal(date.format('L o Y y'), '1 2012 2012 12', '"L", "o", "Y", and "y" tokens are correct for ' +
+      date.toLocaleDateString());
   });
 
-  QUnit.test('format - time parameters', function(assert) {
+  QUnit.test('format - time tokens', function(assert) {
     assert.expect(2);
 
-    assert.deepEqual(date.format('a A B g G h H i s u').split(' '),
-      [ 'pm', 'PM', '584', '1', '13', '01', '13', '01', '01', '000000' ],
-      '"a", "A", "B", "g", "G", "h", "H", "i", "s", and "u" parameters are correct for ' + date.toLocaleTimeString());
+    assert.equal(date.format('a A B g G h H i s u'), 'pm PM 584 1 13 01 13 01 01 000000',
+      '"a", "A", "B", "g", "G", "h", "H", "i", "s", and "u" tokens are correct for ' + date.toLocaleTimeString());
 
     date.setHours(0, 59, 59, 999);
 
-    assert.deepEqual(date.format('a A B g G h H i s u').split(' '),
-      [ 'am', 'AM', '83', '12', '0', '12', '00', '59', '59', '999000' ],
-      '"a", "A", "B", "g", "G", "h", "H", "i", "s", and "u" parameters are correct for ' + date.toLocaleTimeString());
+    assert.equal(date.format('a A B g G h H i s u'), 'am AM 83 12 0 12 00 59 59 999000',
+      '"a", "A", "B", "g", "G", "h", "H", "i", "s", and "u" tokens are correct for ' + date.toLocaleTimeString());
   });
 
-  QUnit.test('format - timezone parameters', function(assert) {
-    assert.expect(7);
+  QUnit.test('format - timezone tokens', function(assert) {
+    assert.expect(2);
 
-    assert.equal(date.format('e'), 'GMT', '"e" parameter is correct');
-    assert.equal(date.format('I'), '0', '"I" parameter is correct');
-    assert.equal(date.format('O'), '+0000', '"O" parameter is correct');
-    assert.equal(date.format('P'), '+00:00', '"P" parameter is correct');
-    assert.equal(date.format('T'), 'GMT', '"T" parameter is correct');
-    assert.equal(date.format('Z'), '0', '"Z" parameter is correct');
+    assert.equal(date.format('e I O P T Z'), 'GMT 0 +0000 +00:00 GMT 0',
+      '"e", "I", "O", "P", "T", and "Z" tokens are correct for ' + date.toLocaleTimeString());
 
     date.setMonth(3);
 
-    assert.equal(date.format('I'), '1', '"I" parameter is correct in April during dalight saving time');
+    assert.equal(date.format('I'), '1', '"I" token is correct in April during dalight saving time');
   });
 
-  QUnit.test('format - full date/time parameters', function(assert) {
+  QUnit.test('format - full date/time tokens', function(assert) {
     assert.expect(4);
 
-    assert.equal(date.format('c'), iso8601, 'ISO 8601 format is "Y-m-d\\TH:i:sP"');
-    assert.equal(date.format('r'), rfc2822, 'RFC 2822 format is "D, j M Y H:i:s O"');
+    assert.equal(date.format('c'), ISO_8601, 'ISO 8601 format is "Y-m-d\\TH:i:sP"');
+    assert.equal(date.format('r'), RFC_2822, 'RFC 2822 format is "D, j M Y H:i:s O"');
     assert.equal(date.format('U'), '1293886861', '1293886861 seconds since Unix Epoch');
 
     date.setTime(0);
 
-    assert.equal(date.format('U'), '0', 'Now zero seconds since Unix Epoch');
+    assert.equal(date.format('U'), '0', '"U" token is correct at Unix Epoch');
   });
 
   // `getDayOfYear` tests
