@@ -1,14 +1,35 @@
 {
-  "name"        : "date-ext",
-  "description" : "Library for extending JavaScript dates",
-  "version"     : "1.0.2",
-  "homepage"    : "http://neocotic.com/date-ext",
-  "bugs"        : {"url"   : "https://github.com/neocotic/date-ext/issues"},
-  "author"      : "Alasdair Mercer <mercer.alasdair@gmail.com> (http://neocotic.com)",
-  "licenses"    : [{"type" : "MIT",
-                    "url"  : "https://github.com/neocotic/date-ext/raw/master/LICENSE.md"}],
-  "keywords"    : ["date", "extend", "format", "iso"],
-  "repository"  : {"type"  : "git",
-                   "url"   : "git://github.com/neocotic/date-ext.git"},
-  "main"        : "date-ext.js"
+  "name": "date-ext",
+  "version": "1.0.2",
+  "description": "Library for extending JavaScript dates",
+  "homepage": "https://github.com/neocotic/date-ext",
+  "bugs": {
+    "url": "https://github.com/neocotic/date-ext/issues"
+  },
+  "author": {
+    "name": "Alasdair Mercer",
+    "email": "mercer.alasdair@gmail.com",
+    "url": "https://neocotic.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "date",
+    "extend",
+    "format",
+    "iso"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neocotic/date-ext.git"
+  },
+  "devDependencies": {
+    "coffeescript": "^1.12.7",
+    "docco": "^0.7.0",
+    "uglify": "^0.1.5"
+  },
+  "main": "date-ext.js",
+  "scripts": {
+    "build": "cake build docs",
+    "ci": "npm run build"
+  }
 }
