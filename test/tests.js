@@ -339,7 +339,9 @@
   QUnit.test('format - timezone tokens', function(assert) {
     assert.expect(2);
 
-    assert.equal(date.format('e I O P T Z'), 'GMT 0 +0000 +00:00 GMT 0',
+    var timezone = date.getTimezone();
+
+    assert.equal(date.format('e I O P T Z'), timezone + ' 0 +0000 +00:00 ' + timezone + ' 0',
       '"e", "I", "O", "P", "T", and "Z" tokens are correct for ' + date.toLocaleTimeString());
 
     date.setMonth(3);
