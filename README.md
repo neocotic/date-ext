@@ -85,7 +85,7 @@ before submitting a pull request.
 
 ## Questions?
 
-Take a look at `docs/date-ext.html` to get a better understanding of what the code
+Take a look at `date-ext.js` to get a better understanding of what the code
 is doing.
 
 If that doesn't help, feel free to follow me on Twitter, [@neocotic][].

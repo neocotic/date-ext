@@ -24,12 +24,11 @@
   },
   "devDependencies": {
     "coffeescript": "^1.12.7",
-    "docco": "^0.7.0",
     "uglify": "^0.1.5"
   },
   "main": "date-ext.js",
   "scripts": {
-    "build": "cake build docs",
+    "build": "cake build",
     "ci": "npm run build"
   }
 }

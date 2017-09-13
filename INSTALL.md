@@ -7,9 +7,7 @@ Follow these steps to build [date-ext][];
 1. Clone a copy of the main [date-ext git repository](https://github.com/neocotic/date-ext) by running `git clone git://github.com/neocotic/date-ext.git`
 2. `cd` to the repository directory
 3. Ensure you have all of the dependencies by entering `npm install`
-4. For the optimized version enter `cake build`
-5. To update the documentation enter `cake docs`
-   * Not currently working on Windows as it uses linux shell commands
+4. For the optimized version enter `npm run ci`
 
 [date-ext]: http://neocotic.com/date-ext
 [git]: http://git-scm.com
